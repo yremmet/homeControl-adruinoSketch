@@ -77,6 +77,20 @@ void setup() {
 
  Serial.write("Setup Complete");
 }
+void serialInt(int value){
+  int c = value%1000;
+  value /= 1000;
+  Serial.write(value + 48);
+  value = c;
+  c = value%100;
+  value /= 100;
+  Serial.write(value + 48);
+  value = c;
+  value /= 10;
+  c = c%10;
+  Serial.write(value+48);
+  Serial.write(c+48);
+}
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -92,22 +106,24 @@ void loop() {
     sendStatus(i);
   }*/
   //readAnalogPin(1);
-  int i= digitalRead(13);
-  sendStatus(13);
-  if(i == HIGH){
+  int i= analogRead(1);
+  serialInt(i);
+  Serial.write('\n');
+  if(i > 960){
+    Serial.print("Turn io \n");
     for(int i = 0; i< 13; i++){
       setPinLevel(i,1); 
       delay(400);
     }
+  } else {
+    Serial.write("Do Nothing\n");
   }
+  
+  
   delay(100);
   for(int i = 0; i< 13; i++){
-    setPinLevel(i,1); 
-    delay(400);
-  }
-  for(int i = 0; i< 13; i++){
-    setPinLevel(i,0); 
-    delay(1);
+    setPinLevel(i,0);  
+    delay(200 );
   }
   
 
